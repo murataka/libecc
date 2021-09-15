@@ -1,31 +1,31 @@
 cmake_minimum_required (VERSION 3.10)
-project (libecc)
+project (libecc_lib)
 #include(ExternalProject)
 
 
 
-set(C_COMPILE_FLAGS "-Wall -g3 -O0 ${NATIVE_OPT} -DPALISADE_VERSION=${PALISADE_VERSION}")
-set(CXX_COMPILE_FLAGS "-Wall -g3 -O0 ${NATIVE_OPT} -DPALISADE_VERSION=${PALISADE_VERSION} ${IGNORE_WARNINGS}")
-
-
-        file(GLOB SOURCE_FILES
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/sig/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/hash/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/fp/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/curves/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/nn/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/sig/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/hash/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/fp/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/curves/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/curves/*/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/nn/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+        file(GLOB LIBECC_SOURCE_FILES
+            ${PROJECT_SOURCE_DIR}/src/external_deps/*.c
+            ${PROJECT_SOURCE_DIR}/src/sig/*.c
+            ${PROJECT_SOURCE_DIR}/src/hash/*.c
+            ${PROJECT_SOURCE_DIR}/src/fp/*.c
+            ${PROJECT_SOURCE_DIR}/src/curves/*.c
+            ${PROJECT_SOURCE_DIR}/src/nn/*.c
+            ${PROJECT_SOURCE_DIR}/src/utils/*.c
+            ${PROJECT_SOURCE_DIR}/src/sig/*.h
+            ${PROJECT_SOURCE_DIR}/src/hash/*.h
+            ${PROJECT_SOURCE_DIR}/src/fp/*.h
+            ${PROJECT_SOURCE_DIR}/src/curves/*.h
+            ${PROJECT_SOURCE_DIR}/src/curves/*/*.h
+            ${PROJECT_SOURCE_DIR}/src/nn/*.h
+            ${PROJECT_SOURCE_DIR}/src/utils/*.h
+            ${PROJECT_SOURCE_DIR}/src/*.h
             )
 
-                add_library(libecc ${SOURCE_FILES} )
+                add_library(libecc STATIC ${LIBECC_SOURCE_FILES} )
 
 set_target_properties(libecc PROPERTIES LINKER_LANGUAGE C)
-target_compile_definitions(libecc PRIVATE WITH_STDLIB USE_ASSERT_PRINT )
+target_compile_definitions(libecc PRIVATE WITH_STDLIB USE_ASSERT_PRINT USE_CRYPTOFUZZ VERBOSE_INNER_VALUES)
+
+include(tests.cmake)
+include(examples.cmake)
